@@ -1,0 +1,75 @@
+name: Deploy Backend Service
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'multi-service-app/webapp-backend-service/**'
+      - 'kubernetes-deployment/deploy-backend-service.yml'
+      - '.github/workflows/deploy-backend.yml'
+
+env:
+  AWS_REGION: ap-south-1
+  EKS_CLUSTER_NAME: mycluster
+  ECR_REPOSITORY: webapp-backend-service
+  ECR_REGISTRY: AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+
+jobs:
+  build-and-push:
+    name: Build and Push Backend Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log In to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, Tag and Push Docker Image
+        working-directory: multi-service-app/webapp-backend-service
+        run: |
+          docker build -t $ECR_REPOSITORY:latest .
+          docker tag $ECR_REPOSITORY:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+  deploy:
+    name: Deploy Backend to EKS
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    environment: production # Triggers manual approval configured on GitHub environment
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set Up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
+      - name: Update Kubeconfig for EKS
+        run: |
+          aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+
+      - name: Deploy to EKS
+        run: |
+          kubectl apply -f kubernetes-deployment/deploy-backend-service.yml
+          kubectl rollout restart deployment/$ECR_REPOSITORY
+          kubectl rollout status deployment/$ECR_REPOSITORY

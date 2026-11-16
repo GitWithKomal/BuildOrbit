@@ -1,0 +1,290 @@
+name: Terraform EKS Cluster
+
+# ─────────────────────────────────────────────────────────────
+# Triggered ONLY via manual dispatch from the GitHub Actions UI
+# ─────────────────────────────────────────────────────────────
+on:
+  workflow_dispatch:
+    inputs:
+
+      action:
+        description: 'Terraform action to perform'
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+        default: plan
+
+      aws_region:
+        description: 'AWS region to deploy the cluster'
+        required: true
+        type: choice
+        options:
+          - ap-south-1
+          - us-east-1
+          - us-west-2
+          - eu-west-1
+        default: ap-south-1
+
+      cluster_name:
+        description: 'EKS cluster name'
+        required: true
+        type: string
+        default: mycluster
+
+      kubernetes_version:
+        description: 'Kubernetes version (e.g. 1.29)'
+        required: true
+        type: string
+        default: '1.29'
+
+      environment:
+        description: 'Environment tag applied to all resources'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+        default: dev
+
+      node_instance_type:
+        description: 'EC2 instance type for worker nodes'
+        required: true
+        type: choice
+        options:
+          - t2.medium
+          - t3.medium
+          - t3.large
+          - t3.xlarge
+          - m5.large
+        default: t2.medium
+
+      node_desired_size:
+        description: 'Desired number of worker nodes'
+        required: true
+        type: string
+        default: '3'
+
+      node_min_size:
+        description: 'Minimum number of worker nodes'
+        required: true
+        type: string
+        default: '1'
+
+      node_max_size:
+        description: 'Maximum number of worker nodes'
+        required: true
+        type: string
+        default: '5'
+
+# ─────────────────────────────────────────────────────────────
+# Prevent simultaneous runs that could corrupt Terraform state
+# ─────────────────────────────────────────────────────────────
+concurrency:
+  group: terraform-eks-${{ github.event.inputs.cluster_name }}-${{ github.event.inputs.aws_region }}
+  cancel-in-progress: false
+
+env:
+  TF_WORKING_DIR: terraform-eks
+  AWS_REGION: ${{ github.event.inputs.aws_region }}
+
+jobs:
+
+  # ───────────────────────────────────────────────────────────
+  # Job 1 — Validate & Plan (always runs)
+  # ───────────────────────────────────────────────────────────
+  terraform-plan:
+    name: 🔍 Terraform Plan
+    runs-on: ubuntu-latest
+
+    outputs:
+      plan_exit_code: ${{ steps.plan.outputs.exit_code }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '~> 1.6'
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -input=false
+
+      - name: Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform Format Check
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform fmt -check -recursive
+        continue-on-error: true   # warn, but don't block
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          terraform plan \
+            -var="aws_region=${{ github.event.inputs.aws_region }}" \
+            -var="cluster_name=${{ github.event.inputs.cluster_name }}" \
+            -var="kubernetes_version=${{ github.event.inputs.kubernetes_version }}" \
+            -var="environment=${{ github.event.inputs.environment }}" \
+            -var="node_instance_type=${{ github.event.inputs.node_instance_type }}" \
+            -var="node_desired_size=${{ github.event.inputs.node_desired_size }}" \
+            -var="node_min_size=${{ github.event.inputs.node_min_size }}" \
+            -var="node_max_size=${{ github.event.inputs.node_max_size }}" \
+            -out=tfplan \
+            -input=false \
+            -detailed-exitcode 2>&1 | tee plan_output.txt
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+        continue-on-error: true   # allow destroy plan's exit code to flow through
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-${{ github.event.inputs.cluster_name }}-${{ github.run_id }}
+          path: |
+            ${{ env.TF_WORKING_DIR }}/tfplan
+            ${{ env.TF_WORKING_DIR }}/plan_output.txt
+          retention-days: 7
+
+      - name: Print Plan Summary
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          echo "## 📋 Terraform Plan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Input | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Action** | \`${{ github.event.inputs.action }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Region** | \`${{ github.event.inputs.aws_region }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Cluster Name** | \`${{ github.event.inputs.cluster_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Kubernetes Version** | \`${{ github.event.inputs.kubernetes_version }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Environment** | \`${{ github.event.inputs.environment }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Node Instance Type** | \`${{ github.event.inputs.node_instance_type }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Desired Nodes** | \`${{ github.event.inputs.node_desired_size }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Min / Max Nodes** | \`${{ github.event.inputs.node_min_size }}\` / \`${{ github.event.inputs.node_max_size }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat plan_output.txt >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+  # ───────────────────────────────────────────────────────────
+  # Job 2 — Apply  (runs only when action == 'apply')
+  # ───────────────────────────────────────────────────────────
+  terraform-apply:
+    name: 🚀 Terraform Apply
+    runs-on: ubuntu-latest
+    needs: terraform-plan
+    if: ${{ github.event.inputs.action == 'apply' }}
+    environment: production   # requires manual approval gate in GitHub Environments
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '~> 1.6'
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -input=false
+
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan-${{ github.event.inputs.cluster_name }}-${{ github.run_id }}
+          path: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Apply
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply -auto-approve -input=false tfplan
+
+      - name: Capture Outputs
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          echo "## ✅ Cluster Provisioned" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          terraform output >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --region ${{ github.event.inputs.aws_region }} \
+            --name ${{ github.event.inputs.cluster_name }}
+
+      - name: Verify Node Status
+        run: kubectl get nodes -o wide
+
+  # ───────────────────────────────────────────────────────────
+  # Job 3 — Destroy  (runs only when action == 'destroy')
+  # ───────────────────────────────────────────────────────────
+  terraform-destroy:
+    name: 💣 Terraform Destroy
+    runs-on: ubuntu-latest
+    needs: terraform-plan
+    if: ${{ github.event.inputs.action == 'destroy' }}
+    environment: production   # requires manual approval gate in GitHub Environments
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '~> 1.6'
+
+      - name: Terraform Init
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform init -input=false
+
+      - name: Terraform Destroy
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          terraform destroy \
+            -var="aws_region=${{ github.event.inputs.aws_region }}" \
+            -var="cluster_name=${{ github.event.inputs.cluster_name }}" \
+            -var="kubernetes_version=${{ github.event.inputs.kubernetes_version }}" \
+            -var="environment=${{ github.event.inputs.environment }}" \
+            -var="node_instance_type=${{ github.event.inputs.node_instance_type }}" \
+            -var="node_desired_size=${{ github.event.inputs.node_desired_size }}" \
+            -var="node_min_size=${{ github.event.inputs.node_min_size }}" \
+            -var="node_max_size=${{ github.event.inputs.node_max_size }}" \
+            -auto-approve \
+            -input=false
+
+      - name: Destroy Summary
+        run: |
+          echo "## 🗑️ Cluster Destroyed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Cluster \`${{ github.event.inputs.cluster_name }}\` in \`${{ github.event.inputs.aws_region }}\` has been fully removed." >> $GITHUB_STEP_SUMMARY

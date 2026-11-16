@@ -1,0 +1,27 @@
+# Terraform local state (never commit — contains sensitive resource IDs)
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Override files (local developer overrides — not for shared use)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Variable files that may contain secrets
+*.tfvars.local
+secrets.tfvars
+
+# Terraform working directory (downloaded providers & modules)
+.terraform/
+
+# Plan files (may contain secrets — share via remote backend instead)
+*.tfplan
+plan.out
+

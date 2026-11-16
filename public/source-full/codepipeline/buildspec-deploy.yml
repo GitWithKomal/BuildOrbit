@@ -1,0 +1,42 @@
+##############################################################
+# buildspec-deploy.yml
+# CodeBuild specification for deploying the multi-service
+# application to the EKS cluster via kubectl.
+##############################################################
+
+version: 0.2
+
+phases:
+
+  install:
+    commands:
+      - echo "Installing kubectl..."
+      - curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/kubectl
+      - kubectl version --client
+
+  pre_build:
+    commands:
+      - echo "Updating kubeconfig for EKS cluster $EKS_CLUSTER_NAME..."
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_DEFAULT_REGION
+
+  build:
+    commands:
+      - echo "Deploying services to EKS..."
+      # Apply manifests in dependency order (Database → Backend → Frontend)
+      - kubectl apply -f kubernetes-deployment/deploy-db-service.yml
+      - kubectl apply -f kubernetes-deployment/deploy-backend-service.yml
+      - kubectl apply -f kubernetes-deployment/deploy-frontend-service.yml
+      # Rolling restart to pick up new images
+      - kubectl rollout restart deployment/webapp-backend-service
+      - kubectl rollout restart deployment/webapp-frontend-service
+      - echo "Waiting for backend rollout..."
+      - kubectl rollout status deployment/webapp-backend-service --timeout=300s
+      - echo "Waiting for frontend rollout..."
+      - kubectl rollout status deployment/webapp-frontend-service --timeout=300s
+
+  post_build:
+    commands:
+      - echo "Deployment complete. Current pod status:"
+      - kubectl get pods -o wide

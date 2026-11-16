@@ -1,0 +1,308 @@
+﻿[
+    {
+        "path":  ".gitignore",
+        "name":  ".gitignore",
+        "folder":  "",
+        "extension":  "gitignore"
+    },
+    {
+        "path":  "LICENSE",
+        "name":  "LICENSE",
+        "folder":  "",
+        "extension":  ""
+    },
+    {
+        "path":  "README.md",
+        "name":  "README.md",
+        "folder":  "",
+        "extension":  "md"
+    },
+    {
+        "path":  "codepipeline/buildspec-backend.yml",
+        "name":  "buildspec-backend.yml",
+        "folder":  "codepipeline",
+        "extension":  "yml"
+    },
+    {
+        "path":  "codepipeline/buildspec-deploy.yml",
+        "name":  "buildspec-deploy.yml",
+        "folder":  "codepipeline",
+        "extension":  "yml"
+    },
+    {
+        "path":  "codepipeline/buildspec-frontend.yml",
+        "name":  "buildspec-frontend.yml",
+        "folder":  "codepipeline",
+        "extension":  "yml"
+    },
+    {
+        "path":  "kubernetes-deployment/deploy-backend-service.yml",
+        "name":  "deploy-backend-service.yml",
+        "folder":  "kubernetes-deployment",
+        "extension":  "yml"
+    },
+    {
+        "path":  "kubernetes-deployment/deploy-db-service.yml",
+        "name":  "deploy-db-service.yml",
+        "folder":  "kubernetes-deployment",
+        "extension":  "yml"
+    },
+    {
+        "path":  "kubernetes-deployment/deploy-frontend-service.yml",
+        "name":  "deploy-frontend-service.yml",
+        "folder":  "kubernetes-deployment",
+        "extension":  "yml"
+    },
+    {
+        "path":  "kubernetes-monitoring/prometheus-grafana-values.yml",
+        "name":  "prometheus-grafana-values.yml",
+        "folder":  "kubernetes-monitoring",
+        "extension":  "yml"
+    },
+    {
+        "path":  "multi-service-app/docker-compose.yml",
+        "name":  "docker-compose.yml",
+        "folder":  "multi-service-app",
+        "extension":  "yml"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/.dockerignore",
+        "name":  ".dockerignore",
+        "folder":  "multi-service-app/webapp-backend-service",
+        "extension":  "dockerignore"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/Dockerfile",
+        "name":  "Dockerfile",
+        "folder":  "multi-service-app/webapp-backend-service",
+        "extension":  ""
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/index.js",
+        "name":  "index.js",
+        "folder":  "multi-service-app/webapp-backend-service",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/package-lock.json",
+        "name":  "package-lock.json",
+        "folder":  "multi-service-app/webapp-backend-service",
+        "extension":  "json"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/package.json",
+        "name":  "package.json",
+        "folder":  "multi-service-app/webapp-backend-service",
+        "extension":  "json"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/README.md",
+        "name":  "README.md",
+        "folder":  "multi-service-app/webapp-backend-service",
+        "extension":  "md"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/controllers/user.controller.js",
+        "name":  "user.controller.js",
+        "folder":  "multi-service-app/webapp-backend-service/controllers",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/lib/connectDB.js",
+        "name":  "connectDB.js",
+        "folder":  "multi-service-app/webapp-backend-service/lib",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/models/User.js",
+        "name":  "User.js",
+        "folder":  "multi-service-app/webapp-backend-service/models",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/routes/user.routes.js",
+        "name":  "user.routes.js",
+        "folder":  "multi-service-app/webapp-backend-service/routes",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-backend-service/scripts/dataEntry.script.js",
+        "name":  "dataEntry.script.js",
+        "folder":  "multi-service-app/webapp-backend-service/scripts",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-db-service/Dockerfile",
+        "name":  "Dockerfile",
+        "folder":  "multi-service-app/webapp-db-service",
+        "extension":  ""
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/.dockerignore",
+        "name":  ".dockerignore",
+        "folder":  "multi-service-app/webapp-frontend-service",
+        "extension":  "dockerignore"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/Dockerfile",
+        "name":  "Dockerfile",
+        "folder":  "multi-service-app/webapp-frontend-service",
+        "extension":  ""
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/package.json",
+        "name":  "package.json",
+        "folder":  "multi-service-app/webapp-frontend-service",
+        "extension":  "json"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/tailwind.config.js",
+        "name":  "tailwind.config.js",
+        "folder":  "multi-service-app/webapp-frontend-service",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/nginx-config/default.conf",
+        "name":  "default.conf",
+        "folder":  "multi-service-app/webapp-frontend-service/nginx-config",
+        "extension":  "conf"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/public/index.html",
+        "name":  "index.html",
+        "folder":  "multi-service-app/webapp-frontend-service/public",
+        "extension":  "html"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/public/robots.txt",
+        "name":  "robots.txt",
+        "folder":  "multi-service-app/webapp-frontend-service/public",
+        "extension":  "txt"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/src/App.css",
+        "name":  "App.css",
+        "folder":  "multi-service-app/webapp-frontend-service/src",
+        "extension":  "css"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/src/App.js",
+        "name":  "App.js",
+        "folder":  "multi-service-app/webapp-frontend-service/src",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/src/App.test.js",
+        "name":  "App.test.js",
+        "folder":  "multi-service-app/webapp-frontend-service/src",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/src/index.css",
+        "name":  "index.css",
+        "folder":  "multi-service-app/webapp-frontend-service/src",
+        "extension":  "css"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/src/index.js",
+        "name":  "index.js",
+        "folder":  "multi-service-app/webapp-frontend-service/src",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/src/logo.svg",
+        "name":  "logo.svg",
+        "folder":  "multi-service-app/webapp-frontend-service/src",
+        "extension":  "svg"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/src/reportWebVitals.js",
+        "name":  "reportWebVitals.js",
+        "folder":  "multi-service-app/webapp-frontend-service/src",
+        "extension":  "js"
+    },
+    {
+        "path":  "multi-service-app/webapp-frontend-service/src/setupTests.js",
+        "name":  "setupTests.js",
+        "folder":  "multi-service-app/webapp-frontend-service/src",
+        "extension":  "js"
+    },
+    {
+        "path":  "terraform-codepipeline/.gitignore",
+        "name":  ".gitignore",
+        "folder":  "terraform-codepipeline",
+        "extension":  "gitignore"
+    },
+    {
+        "path":  "terraform-codepipeline/main.tf",
+        "name":  "main.tf",
+        "folder":  "terraform-codepipeline",
+        "extension":  "tf"
+    },
+    {
+        "path":  "terraform-codepipeline/outputs.tf",
+        "name":  "outputs.tf",
+        "folder":  "terraform-codepipeline",
+        "extension":  "tf"
+    },
+    {
+        "path":  "terraform-codepipeline/variables.tf",
+        "name":  "variables.tf",
+        "folder":  "terraform-codepipeline",
+        "extension":  "tf"
+    },
+    {
+        "path":  "terraform-eks/.gitignore",
+        "name":  ".gitignore",
+        "folder":  "terraform-eks",
+        "extension":  "gitignore"
+    },
+    {
+        "path":  "terraform-eks/.terraform.lock.hcl",
+        "name":  ".terraform.lock.hcl",
+        "folder":  "terraform-eks",
+        "extension":  "hcl"
+    },
+    {
+        "path":  "terraform-eks/main.tf",
+        "name":  "main.tf",
+        "folder":  "terraform-eks",
+        "extension":  "tf"
+    },
+    {
+        "path":  "terraform-eks/outputs.tf",
+        "name":  "outputs.tf",
+        "folder":  "terraform-eks",
+        "extension":  "tf"
+    },
+    {
+        "path":  "terraform-eks/variables.tf",
+        "name":  "variables.tf",
+        "folder":  "terraform-eks",
+        "extension":  "tf"
+    },
+    {
+        "path":  "workflow-archive/deploy-backend.yml",
+        "name":  "deploy-backend.yml",
+        "folder":  "workflow-archive",
+        "extension":  "yml"
+    },
+    {
+        "path":  "workflow-archive/deploy-frontend.yml",
+        "name":  "deploy-frontend.yml",
+        "folder":  "workflow-archive",
+        "extension":  "yml"
+    },
+    {
+        "path":  "workflow-archive/deploy-monitoring.yml",
+        "name":  "deploy-monitoring.yml",
+        "folder":  "workflow-archive",
+        "extension":  "yml"
+    },
+    {
+        "path":  "workflow-archive/terraform-eks.yml",
+        "name":  "terraform-eks.yml",
+        "folder":  "workflow-archive",
+        "extension":  "yml"
+    }
+]

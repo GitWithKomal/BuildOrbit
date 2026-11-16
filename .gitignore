@@ -1,0 +1,15 @@
+@"
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform/
+*.pem
+*.key
+.DS_Store
+.vscode/
+"@ | Set-Content .gitignore

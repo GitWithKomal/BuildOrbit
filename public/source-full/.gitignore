@@ -1,0 +1,22 @@
+.env*
+multi-service-app/webapp-backend-service/node_modules
+multi-service-app/webapp-backend-service/build
+multi-service-app/webapp-frontend-service/node_modules
+multi-service-app/webapp-frontend-service/build
+# Terraform sensitive and local files
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
+**/*.tfplan
+**/tfplan
+**/plan.out
+**/crash.log
+**/crash.*.log
+
+# Credentials and private keys
+.aws/
+*.pem
+*.key
+terraform.rc
+.terraformrc

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-frontend-service
+  labels:
+    app: webapp-frontend-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-frontend-service
+  template:
+    metadata:
+      labels:
+        app: webapp-frontend-service
+    spec:
+      containers:
+        - name: frontend
+          image: AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/webapp-frontend-service:latest
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-frontend-service
+spec:
+  selector:
+    app: webapp-frontend-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
