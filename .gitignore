@@ -1,5 +1,4 @@
-@"
-node_modules/
+﻿node_modules/
 dist/
 .env
 .env.*
@@ -12,4 +11,6 @@ dist/
 *.key
 .DS_Store
 .vscode/
-"@ | Set-Content .gitignore
+
+# Local backup files
+*.backup.*
