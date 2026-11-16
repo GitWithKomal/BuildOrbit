@@ -9,23 +9,32 @@
 **Building, visualizing, and exploring cloud-native infrastructure, CI/CD pipelines, Kubernetes deployments, and DevOps automation.**
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Linux-Operating%20System-FCC624?logo=linux&logoColor=black" alt="Linux">
+  <img src="https://img.shields.io/badge/AWS-Cloud-FF9900?logo=amazonaws&logoColor=white" alt="AWS">
+  <img src="https://img.shields.io/badge/AWS%20CodePipeline-CI%2FCD-FF9900?logo=amazonaws&logoColor=white" alt="AWS CodePipeline">
+  <img src="https://img.shields.io/badge/Amazon%20ECR-Container%20Registry-FF9900?logo=amazonaws&logoColor=white" alt="Amazon ECR">
+  <img src="https://img.shields.io/badge/Amazon%20EKS-Kubernetes-FF9900?logo=amazoneks&logoColor=white" alt="Amazon EKS">
+  <img src="https://img.shields.io/badge/Terraform-Infrastructure%20as%20Code-7B42BC?logo=terraform&logoColor=white" alt="Terraform">
+  <img src="https://img.shields.io/badge/Docker-Containers-2496ED?logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/Docker%20Compose-Multi--Container-2496ED?logo=docker&logoColor=white" alt="Docker Compose">
+  <img src="https://img.shields.io/badge/Kubernetes-Container%20Orchestration-326CE5?logo=kubernetes&logoColor=white" alt="Kubernetes">
+  <img src="https://img.shields.io/badge/Helm-Kubernetes%20Packages-0F1689?logo=helm&logoColor=white" alt="Helm">
+  <img src="https://img.shields.io/badge/Ansible-Automation-EE0000?logo=ansible&logoColor=white" alt="Ansible">
+  <img src="https://img.shields.io/badge/NGINX-Web%20Server-009639?logo=nginx&logoColor=white" alt="NGINX">
+  <img src="https://img.shields.io/badge/Prometheus-Monitoring-E6522C?logo=prometheus&logoColor=white" alt="Prometheus">
+  <img src="https://img.shields.io/badge/Grafana-Observability-F46800?logo=grafana&logoColor=white" alt="Grafana">
+  <img src="https://img.shields.io/badge/Blackbox%20Exporter-Monitoring-E6522C" alt="Blackbox Exporter">
+  <img src="https://img.shields.io/badge/Alertmanager-Alerting-E6522C" alt="Alertmanager">
+  <img src="https://img.shields.io/badge/Bash-Scripting-4EAA25?logo=gnubash&logoColor=white" alt="Bash">
+  <img src="https://img.shields.io/badge/YAML-Configuration-CB171E?logo=yaml&logoColor=white" alt="YAML">
+</p>
+
+<p align="center"><em>DevOps technologies represented in the documented capstone project.</em></p>
+
+<p align="center">
   <a href="https://gitwithkomal.github.io/BuildOrbit/"><strong>Live Application</strong></a> ·
   <a href="https://github.com/GitWithKomal/BuildOrbit"><strong>Source Code</strong></a> ·
   <a href="https://github.com/GitWithKomal/BuildOrbit/actions"><strong>GitHub Actions</strong></a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/React-UI-61DAFB?logo=react&logoColor=black" alt="React">
-  <img src="https://img.shields.io/badge/Vite-Build%20Tool-646CFF?logo=vite&logoColor=white" alt="Vite">
-  <img src="https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?logo=javascript&logoColor=black" alt="JavaScript">
-  <img src="https://img.shields.io/badge/CSS3-Styling-1572B6?logo=css3&logoColor=white" alt="CSS3">
-  <img src="https://img.shields.io/badge/Highlight.js-Syntax%20Highlighting-222222" alt="Highlight.js">
-  <img src="https://img.shields.io/badge/Recharts-Data%20Visualization-22B5BF" alt="Recharts">
-  <img src="https://img.shields.io/badge/Lucide-Icons-F56565" alt="Lucide">
-  <img src="https://img.shields.io/badge/Git-Version%20Control-F05032?logo=git&logoColor=white" alt="Git">
-  <img src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white" alt="GitHub">
-  <img src="https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-2088FF?logo=githubactions&logoColor=white" alt="GitHub Actions">
-  <img src="https://img.shields.io/badge/GitHub%20Pages-Deployment-222222?logo=githubpages&logoColor=white" alt="GitHub Pages">
 </p>
 
 ---
